@@ -1,0 +1,52 @@
+server:
+  port: 8880
+
+spring:
+#  profiles:
+#    active: dev
+  datasource:
+    name: druidDataSource
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+        driverClassName: com.mysql.cj.jdbc.Driver
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        platform: mysql
+        url: jdbc:mysql://localhost:3306/ryds?useSSL=true&serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+        username: root
+        password: mysql94
+        initialSize: 5
+        minIdle: 5
+        maxActive: 20
+        maxWait: 60000
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: SELECT 1 FROM DUAL
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        filters: stat,wall
+        logSlowSql: true
+
+mybatis-plus:
+  configuration:
+    # 将sql打印到控制台（该配置会将sql语句和查询的结果都打印到控制台）
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 是否开启自动驼峰命名规则映射，MP默认是开启的
+    map-underscore-to-camel-case: true
+  # 自动以SQL语句文件路径
+  mapper-locations: classpath:mapper/*
+  # MP设置全局id策略为uuid，拒不设置id策略在实体类对象的id属性上设置(局部策略 优先于 全局策略)
+  global-config:
+    db-config:
+      # 主键策略配置
+      #id-type: uuid
+      # 子弹验证策略配置
+      insert-strategy: not_null
+      update-strategy: not_null
+      select-strategy: not_null
+      # 表名前缀配置
+      #table-prefix: sys_
+  # mybatis的自定义配置
+  # config-location: classpath:mybatis-config.xml   // config-location配置不可与configuration同时配置，否则启动时程序会报错
+  # myBaits别名包扫描路径配置
+  type-aliases-package: com.ethan.ryds.entity
