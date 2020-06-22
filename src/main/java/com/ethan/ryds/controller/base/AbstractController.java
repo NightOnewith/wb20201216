@@ -1,6 +1,6 @@
 package com.ethan.ryds.controller.base;
 
-import com.ethan.ryds.entity.SysUser;
+import com.ethan.ryds.entity.sys.SysUser;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;

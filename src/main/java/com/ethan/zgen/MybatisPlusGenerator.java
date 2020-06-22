@@ -19,7 +19,7 @@ public class MybatisPlusGenerator {
     private static String packageName = "src/main";          //初始文件路径
     private static String customPath = "zgencode";            //自定义路径
     private static String authorName = "Ethan";              //作者
-    private static String table = "sys_user";            //table名字
+    private static String table = "sys_log";            //table名字
     private static String prefix = "sys_";                   //table前缀
     private static File file = new File(packageName);
     private static String path = file.getAbsolutePath();

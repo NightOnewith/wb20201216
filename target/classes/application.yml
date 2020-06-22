@@ -34,12 +34,12 @@ mybatis-plus:
     # 是否开启自动驼峰命名规则映射，MP默认是开启的
     map-underscore-to-camel-case: true
   # 自动以SQL语句文件路径
-  mapper-locations: classpath:mapper/*
+  mapper-locations: classpath*:/mapper/**/*.xml
   # MP设置全局id策略为uuid，拒不设置id策略在实体类对象的id属性上设置(局部策略 优先于 全局策略)
   global-config:
     db-config:
       # 主键策略配置
-      #id-type: uuid
+      # id-type: uuid
       # 子弹验证策略配置
       insert-strategy: not_null
       update-strategy: not_null
