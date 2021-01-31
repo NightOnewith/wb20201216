@@ -17,9 +17,9 @@ import java.util.*;
  */
 public class MybatisPlusGenerator {
     private static String packageName = "src/main";          //初始文件路径
-    private static String customPath = "zgencode";            //自定义路径
+    private static String customPath = "code";               //自定义路径
     private static String authorName = "Ethan";              //作者
-    private static String table = "sys_log";            //table名字
+    private static String table = "comment_reply";           //table名字
     private static String prefix = "sys_";                   //table前缀
     private static File file = new File(packageName);
     private static String path = file.getAbsolutePath();
@@ -59,13 +59,13 @@ public class MybatisPlusGenerator {
                 .setDriverName("com.mysql.cj.jdbc.Driver")
                 .setUsername("root")
                 .setPassword("mysql94")
-                .setUrl("jdbc:mysql://localhost:3306/ryds?useSSL=true&serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8");
+                .setUrl("jdbc:mysql://localhost:3306/jinling?useSSL=true&serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8");
         generator.setDataSource(dsc);
 
         // 包配置
         PackageConfig pc = new PackageConfig()
                 //.setModuleName("User")
-                .setParent("com.ethan." + customPath)// 自定义包路径
+                .setParent("com.ethan.zgen." + customPath)// 自定义包路径
                 .setController("controller")// 这里是控制器包名，默认 web
                 .setEntity("entity")
                 .setMapper("dao")
@@ -83,31 +83,6 @@ public class MybatisPlusGenerator {
                 .setRestControllerStyle(true)
                 .setEntityLombokModel(true)
                 .setTableFillList(tableFillList);
-        //.setExclude(new String[]{"test"}) // 排除生成的表
-        // 自定义实体父类
-        // .setSuperEntityClass("com.baomidou.demo.TestEntity")
-        // 自定义实体，公共字段
-        //.setSuperEntityColumns(new String[]{"test_id"})
-        // 自定义 mapper 父类
-        // .setSuperMapperClass("com.baomidou.demo.TestMapper")
-        // 自定义 service 父类
-        // .setSuperServiceClass("com.baomidou.demo.TestService")
-        // 自定义 service 实现类父类
-        // .setSuperServiceImplClass("com.baomidou.demo.TestServiceImpl")
-        // 自定义 controller 父类
-        //.setSuperControllerClass("com.ethan"+packageName+".controller.AbstractController")
-        // 【实体】是否生成字段常量（默认 false）
-        // public static final String ID = "test_id";
-        // .setEntityColumnConstant(true)
-        // 【实体】是否为构建者模型（默认 false）
-        // public User setName(String name) {this.name = name; return this;}
-        // .setEntityBuilderModel(true)
-        // 【实体】是否为lombok模型（默认 false）<a href="https://projectlombok.org/">document</a>
-        // Boolean类型字段是否移除is前缀处理
-        // .setEntityBooleanColumnRemoveIsPrefix(true)
-        // .setControllerMappingHyphenStyle(true)
-        // .setCapitalMode(true)// 全局大写命名
-        //.setDbColumnUnderline(true)//全局下划线命名
         generator.setStrategy(strategy);
 
         // 自定义配置
@@ -122,7 +97,7 @@ public class MybatisPlusGenerator {
             // 自定义输出文件目录
             @Override
             public String outputFile(TableInfo tableInfo) {
-                return path + "/resources/mapper/" + tableInfo.getEntityName() + "Mapper.xml";
+                return path + "/resources/mapper/module/" + tableInfo.getEntityName() + "Mapper.xml";
             }
         }));
         generator.setCfg(cfg);
@@ -131,14 +106,6 @@ public class MybatisPlusGenerator {
         TemplateConfig templateConfig = new TemplateConfig()
                 // 关闭默认 xml 生成，调整生成 至 根目录
                 .setXml(null);
-        // 自定义模板配置，模板可以参考源码 /mybatis-plus/src/main/resources/template 使用 copy
-        // 至您项目 src/main/resources/template 目录下，模板名称也可自定义如下配置：
-        // .setController("...");
-        // .setEntity("...");
-        // .setMapper("...");
-        // .setXml("...");
-        // .setService("...");
-        // .setServiceImpl("...");
         generator.setTemplate(templateConfig);
 
         // 执行生成

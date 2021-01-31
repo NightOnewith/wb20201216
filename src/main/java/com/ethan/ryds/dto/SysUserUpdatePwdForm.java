@@ -9,7 +9,10 @@ import lombok.Data;
  */
 @Data
 public class SysUserUpdatePwdForm {
+
     private long userId;
+
     private String username;
+
     private String password;
 }

@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ethan</groupId>
-	<artifactId>ryds</artifactId>
+	<artifactId>wb20201216</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ryds</name>
-	<description>A video learning website of management project</description>
+	<name>wb20201216</name>
+	<description>A school website of management project</description>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -46,7 +46,8 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
+			<!--<scope>runtime</scope>-->
+			<version>8.0.11</version>
 		</dependency>
 
 		<dependency>

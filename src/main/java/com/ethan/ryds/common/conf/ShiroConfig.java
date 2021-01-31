@@ -45,13 +45,34 @@ public class ShiroConfig {
         //filterMap.put("/druid/**", "anon");
         //filterMap.put("/app/**", "anon");
         filterMap.put("/sys/login", "anon");
+        filterMap.put("/uploadPicWord/pic", "anon");
+        filterMap.put("/uploadPicWord/word", "anon");
+        filterMap.put("/uploadPicWord/uploadImg", "anon");
+        filterMap.put("/studentScore/export", "anon");
+
+        /*===================== 用户端请求不拦截接口 ======================*/
+        filterMap.put("/experDes/select", "anon");
+        filterMap.put("/experDes/gxxy", "anon");
+        filterMap.put("/experDes/syxmjs", "anon");
+        filterMap.put("/experDes/descinfo/**", "anon");
+        filterMap.put("/teachingTeam/select", "anon");
+        filterMap.put("/teachingTeam/teacherinfo/**", "anon");
+        filterMap.put("/page/view/index", "anon");
+        filterMap.put("/page/view/count", "anon");
+        filterMap.put("/commentTopic/list", "anon");
+        filterMap.put("/evaluateInfo/list", "anon");
+        filterMap.put("/sys/user/register", "anon");
+
+
+        /*=============================================================*/
         //filterMap.put("/swagger/**", "anon");
         //filterMap.put("/v2/api-docs", "anon");
         //filterMap.put("/swagger-ui.html", "anon");
         //filterMap.put("/swagger-resources/**", "anon");
         //filterMap.put("/captcha.jpg", "anon");
         //filterMap.put("/aaa.txt", "anon");
-        //filterMap.put("/static/**", "anon");
+        filterMap.put("/static/**", "anon");
+        filterMap.put("/upload/**", "anon"); // 上传文件访问路径
         filterMap.put("/**", "oauth2");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
         // 设置登录的请求（如果请求被拦截则跳转到登录页面）

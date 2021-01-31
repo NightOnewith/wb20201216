@@ -1,5 +1,5 @@
 server:
-  port: 8880
+  port: 9994
 
 spring:
 #  profiles:
@@ -9,23 +9,29 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
         driverClassName: com.mysql.cj.jdbc.Driver
-        driver-class-name: com.mysql.cj.jdbc.Driver
+#        driver-class-name: com.mysql.cj.jdbc.Driver
+# 121.41.82.47
         platform: mysql
-        url: jdbc:mysql://localhost:3306/ryds?useSSL=true&serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
-        username: root
-        password: mysql94
+        url: jdbc:mysql://121.41.82.47:3306/wb20201216?useSSL=true&serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+        username: wb20201216
+        password: wb20201216
         initialSize: 5
         minIdle: 5
         maxActive: 20
-        maxWait: 60000
+        maxWait: 86400
         timeBetweenEvictionRunsMillis: 60000
         minEvictableIdleTimeMillis: 300000
         validationQuery: SELECT 1 FROM DUAL
         testWhileIdle: true
-        testOnBorrow: false
+        testOnBorrow: true
         testOnReturn: false
         filters: stat,wall
         logSlowSql: true
+  # 文件上传大小限制为 10MB
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 mybatis-plus:
   configuration:
@@ -50,3 +56,19 @@ mybatis-plus:
   # config-location: classpath:mybatis-config.xml   // config-location配置不可与configuration同时配置，否则启动时程序会报错
   # myBaits别名包扫描路径配置
   type-aliases-package: com.ethan.ryds.entity
+
+prop:
+#  windows
+#  upload-folder: /upload/
+
+# linux
+  upload-folder: /upload/
+
+
+file:
+  # 上传的服务器上的映射文件夹
+  accessPath: /upload/
+  # 静态资源对外暴露的访问路径
+  staticAccessPath: /upload/**
+  #文件上传目录（注意Linux和 Windows上的目录结构不同）
+  uploadFolder: /root/uploads/

@@ -44,4 +44,14 @@ public interface SysUserService extends IService<SysUser> {
      */
     boolean updateUserPwd(SysUserUpdatePwdForm form);
 
+    /**
+     * 导入学生
+     */
+    int importStudents(SysUser[] list);
+
+    /**
+     * 批量添加学生到班级
+     */
+    int importToClass(String[] ids);
+
 }

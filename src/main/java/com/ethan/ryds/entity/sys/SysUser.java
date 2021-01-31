@@ -1,5 +1,6 @@
 package com.ethan.ryds.entity.sys;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -34,6 +35,7 @@ public class SysUser extends Model<SysUser> {
     /**
      * 用户名
      */
+    @Excel(name = "用户名", orderNum = "1")
     private String username;
 
     /**
@@ -49,12 +51,37 @@ public class SysUser extends Model<SysUser> {
     /**
      * 邮箱
      */
+    @Excel(name = "邮箱", orderNum = "2")
     private String email;
 
     /**
      * 手机号
      */
+    @Excel(name = "手机号", orderNum = "3")
     private Long mobile;
+
+    /**
+     * 学校
+     */
+    @Excel(name = "学校", orderNum = "4")
+    private String school;
+
+    /**
+     * 班级
+     */
+    @Excel(name = "班级", orderNum = "5")
+    private String classmate;
+
+    /**
+     * 专业
+     */
+    @Excel(name = "专业", orderNum = "6")
+    private String specialty;
+
+    /**
+     * 职务  0：管理员   1：教师   2：学生
+     */
+    private Integer position;
 
     /**
      * 个人简介
@@ -83,6 +110,12 @@ public class SysUser extends Model<SysUser> {
      */
     @TableField(exist=false)
     private List<Long> roleIdList;
+
+    /**
+     * 教师拥有的班级列表
+     */
+    @TableField(exist=false)
+    private List<String> classmateList;
 
 
     @Override

@@ -45,6 +45,7 @@ public class OAuth2Realm extends AuthorizingRealm {
 
         //用户权限列表
         Set<String> permsSet = shiroService.getUserPermissions(userId);
+        System.out.println(permsSet);
 
         // 写入用户权限
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();

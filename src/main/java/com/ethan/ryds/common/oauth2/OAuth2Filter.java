@@ -4,12 +4,15 @@ import com.ethan.ryds.common.constant.Constants;
 import com.ethan.ryds.common.utils.HttpContextUtils;
 import com.ethan.ryds.common.utils.JWTUtils;
 import com.ethan.ryds.common.utils.R;
+import com.ethan.ryds.common.utils.ViewCountUtils;
+import com.ethan.ryds.service.module.PageViewService;
 import com.google.gson.Gson;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletRequest;
@@ -27,6 +30,8 @@ import java.util.List;
  *
  */
 public class OAuth2Filter extends AuthenticatingFilter {
+    @Autowired
+    private PageViewService pageViewService;
 
     // 用户退出的token，存入黑名单，每次拦截请求判断token时，移除过期token
     public static List<String> tokenBlackList = new ArrayList();
@@ -56,6 +61,8 @@ public class OAuth2Filter extends AuthenticatingFilter {
     // 拒绝访问的请求，会调用该方法，先获取token进行校验，在调用executeLogin登录方法。
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
+        /*=============================================================*/
+
         //获取请求token，如果token不存在，直接返回401
         String token = getRequestToken((HttpServletRequest) request);
 
@@ -100,6 +107,7 @@ public class OAuth2Filter extends AuthenticatingFilter {
 
             return false;
         }
+
     }
 
     // 登录失败时调用

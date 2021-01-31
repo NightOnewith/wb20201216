@@ -31,6 +31,8 @@ public class Constants {
 
         USER_NAME_CLOCKED(110, "账号已被锁定,请联系管理员"),
 
+        USER_NAME_UNEXIST(120, "账号不存在"),
+
         INTERNAL_SERVER_SUCCESS(200, "success"),  // 请求成功
 
         USER_UNAUTHORIZED(401, "invalid token"), // 登录/认证失败

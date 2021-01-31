@@ -13,6 +13,7 @@ import com.ethan.ryds.common.utils.PageUtils;
 import com.ethan.ryds.common.utils.Query;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (!params.get("mobile").toString().isEmpty()) {
             queryWrapper.like(SysUser::getMobile, params.get("mobile"));
         }
+        if (!params.get("position").toString().isEmpty()) {
+            queryWrapper.eq(SysUser::getPosition, params.get("position"));
+            if ("2".equals(params.get("position").toString())) { // 只有学生拼接classmate
+                if (!params.get("classmate").toString().isEmpty()) {
+                    queryWrapper.eq(SysUser::getClassmate, params.get("classmate"));
+                }
+            }
+        }
         if ("已删除".equals(params.get("status"))) {
             queryWrapper.eq(SysUser::getStatus, 2);
         } else {
@@ -53,6 +62,25 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 设置分页参数
         IPage<SysUser> page = this.page(new Query<SysUser>().getPage(params), queryWrapper);
         PageUtils pageUtils = new PageUtils(page);
+        List<SysUser> sysUsers = (List<SysUser>) pageUtils.getList();
+
+        // 教师进行班级列表处理
+        if ("1".equals(params.get("position").toString())) {
+            List<SysUser> sysUserList = new ArrayList<>();
+            for (SysUser user : sysUsers) {
+                if (!user.getClassmate().isEmpty() && user.getClassmate() != null) {
+                    List<String> classmateList = new ArrayList<>();
+                    String classmate = user.getClassmate();
+                    String[] split = classmate.split(",");
+                    for (int i = 0; i < split.length; i++) {
+                        classmateList.add(split[i]);
+                    }
+                    user.setClassmateList(classmateList);
+                }
+                sysUserList.add(user);
+            }
+            pageUtils.setList(sysUserList);
+        }
 
         return pageUtils;
     }
@@ -124,6 +152,58 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         boolean flag = this.updateById(user);
 
         return flag;
+    }
+
+    @Override
+    @Transactional
+    public int importStudents(SysUser[] list) {
+        Long userId = ((SysUser) SecurityUtils.getSubject().getPrincipal()).getUserId();
+
+        // 封装学生列表数据
+        for (int i = 0; i < list.length; i++) {
+            SysUser sysUser = list[i];
+            sysUser.setCreateTime(LocalDateTime.now());
+            sysUser.setIntroduction("此用户很懒~，未填写个人简介。");
+            sysUser.setPosition(2);
+            sysUser.setStatus(1);
+            sysUser.setCreateUserId(userId);
+            // sha256加密
+            String salt = RandomStringUtils.randomAlphanumeric(20);
+            // 默认密码
+            sysUser.setPassword(new Sha256Hash("123456", salt).toHex());
+            sysUser.setSalt(salt);
+
+            //TODO 保存到数据库
+            this.save(sysUser);
+        }
+
+        return list.length;
+    }
+
+    @Override
+    public int importToClass(String[] ids) {
+        // 用户id数组
+        Long[] userIds = new Long[ids.length-1];
+        // 班级名称
+        String classmate = "";
+
+        for (int i = 0; i < ids.length; i++) {
+            if (i < ids.length-1) {
+                userIds[i] = Long.valueOf(ids[i]);
+            } else {
+                // ids数组最后一个为班级名称！！！
+                classmate = ids[i];
+            }
+        }
+
+        // 更新数据库
+        for (int i = 0; i < userIds.length; i++) {
+            SysUser sysUser = sysUserMapper.selectById(userIds[i]);
+            sysUser.setClassmate(classmate);
+            sysUserMapper.updateById(sysUser);
+        }
+
+        return userIds.length;
     }
 
 }

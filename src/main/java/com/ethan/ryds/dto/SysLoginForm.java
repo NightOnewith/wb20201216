@@ -9,6 +9,18 @@ import lombok.Data;
 @Data
 public class SysLoginForm {
 
+    /**
+     * 账号
+     */
     private String username;
+
+    /**
+     * 密码
+     */
     private String password;
+
+    /**
+     * 登录平台
+     */
+    private String platform;
 }

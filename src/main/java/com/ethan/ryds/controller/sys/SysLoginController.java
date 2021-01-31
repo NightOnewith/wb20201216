@@ -41,14 +41,24 @@ public class SysLoginController extends AbstractController {
         LambdaQueryWrapper<SysUser> queryWrapper = new QueryWrapper<SysUser>().lambda().eq(SysUser::getUsername, form.getUsername());
         SysUser sysUser = sysUserService.getOne(queryWrapper);
 
-        //账号不存在、密码错误
+        // 账号不存在、密码错误
         if(null == sysUser || !sysUser.getPassword().equals(new Sha256Hash(form.getPassword(), sysUser.getSalt()).toHex())) {
             return R.error(Constants.HttpStatus.USER_NAME_OR_PASSWORD_ERROR.getStatus(), Constants.HttpStatus.USER_NAME_OR_PASSWORD_ERROR.getMsg());
         }
 
-        //账号锁定
+        // 判断登录平台，限制学生不可登录后台管理系统
+        if ("后台".equals(form.getPlatform()) && sysUser.getPosition() == 2) {
+            return R.error(Constants.HttpStatus.USER_NAME_OR_PASSWORD_ERROR.getStatus(), Constants.HttpStatus.USER_NAME_OR_PASSWORD_ERROR.getMsg());
+        }
+
+        // 账号锁定
         if(0 == sysUser.getStatus()){
             return R.error(Constants.HttpStatus.USER_NAME_CLOCKED.getStatus(), Constants.HttpStatus.USER_NAME_CLOCKED.getMsg());
+        }
+
+        // 账号被删除
+        if(2 == sysUser.getStatus()){
+            return R.error(Constants.HttpStatus.USER_NAME_UNEXIST.getStatus(), Constants.HttpStatus.USER_NAME_UNEXIST.getMsg());
         }
 
         SysUser user = new SysUser();
@@ -57,7 +67,7 @@ public class SysLoginController extends AbstractController {
         user.setStatus(sysUser.getStatus());
         user.setCreateTime(sysUser.getCreateTime());
 
-        //生成token，返回给前端
+        // 生成token，返回给前端
         String token = JWTUtils.createToken(UUID.randomUUID().toString(),
                 sysUser.getUsername(),
                 JWTUtils.generalSubject(user),
